@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GeekGame</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/W3.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3" style="z-index:1010">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GeekGame</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Nationalities" asp-action="Index">Nationalities</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="container">
+                <br />
+                <div class="progress w3-animate-top" id="veiwbagerror" style="height:auto">
+                    <div class="progress-bar bg-danger progress-bar-striped progress-bar-animated active w3-large position-relative" style="width:100%">
+                        <a href="#" class="close w3-xxlarge" style="position:absolute;top:0px; left: 5px;opacity:.25" id="close" onclick="$('#close').fadeOut(50);$('#veiwbagerror').animate({ width: '0', height: '0' }, 'slow').fadeOut(0);">&times;</a>
+                        @ViewBag.ErrorMessage
+                    </div>
+                </div>
+            </div>
+        }
+        @if (TempData["Success"] != null)
+        {
+            <div class="container">
+                <br />
+                <div class="progress w3-animate-top" id="tempsuccess" style="height:auto">
+                    <div class="progress-bar  progress-bar-striped progress-bar-animated active w3-large position-relative" style="width:100%">
+                        <a href="#" class="close w3-xxlarge" style="position:absolute;top:0px; left: 5px;opacity:.25" id="close3" onclick="$('#close3').fadeOut(50);$('#tempsuccess').animate({ width: '0', height: '0' }, 'slow').fadeOut(0);">&times;</a>
+                        @TempData["Success"]
+                    </div>
+                </div>
+            </div>
+        }
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - GeekGame - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

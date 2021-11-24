@@ -1,0 +1,163 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    .height-350 {
+        height: 350px;
+    }
+
+    .nationality-box {
+        height: 150px;
+        width: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nationality-image-container {
+        position: absolute;
+        top: 0px;
+        left: 45%;
+        width: 200px;
+        height: 300px;
+        overflow: hidden;
+        cursor: grab;
+        z-index: 1001;
+    }
+</style>
+<div class="container">
+    <div class="row height-350">
+        <div class="col-md-6" id="japanesebox">
+            <div class="nationality-box w3-card-2  w3-display-topleft">
+                Japanese
+            </div>
+        </div>
+        <div class="col-md-6" id="chinesebox">
+            <div class="nationality-box w3-card-2  w3-display-topright">
+                Chinese
+            </div>
+        </div>
+    </div>
+    <div class="row height-350">
+        <div class="col-md-6" id="koreanbox">
+            <div class="nationality-box w3-card-2  w3-display-bottomleft">
+                Korean
+            </div>
+        </div>
+        <div class="col-md-6" id="thaibox">
+            <div class="nationality-box w3-card-2  w3-display-bottomright">
+                Thai
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dataContainer"></div>
+<div id="score" class="bg-light w3-padding w3-margin w3-round-medium text-center">
+
+</div>
+<button class="btn btn-primary w3-margin w3-padding " style="display:none" id="refreshButton">Play again</button>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+
+    <script>
+        var thiPosition = $('#thaibox').position();
+        var pageVerticalCenter = thiPosition.left;
+        var pageHorizentalCenter = thiPosition.top;
+        var score = 0;
+        $(document).ready(function () {
+            GetData(0);
+        });
+        function GetData(dataIndex) {
+            var scriptUrl = "/Home/GetData/?dataIndex=" + dataIndex;
+            $.ajax
+                ({
+                    url: scriptUrl,
+                    type: 'get',
+                    dataType: 'Json',
+                    success: function (result) {
+                        setTimeout(function () {
+                            if (result != "null" && result != null) {
+                                $("#dataContainer").html("");
+                                $("#dataContainer").append($("<div class='nationality-image-container' id='imgcontainer' ><img src='" + result.image + "' alt='" + result.nationality + "' class='img-fluid img-thumbnail w3-card-2' id='natImage' draggable='true' /></div >"));
+                                $("#imgcontainer").fadeIn(50);
+                                $("#imgcontainer").css({ top: 500, 'opacity': '.4', 'transition': 'linear 3s' });
+                                $("#imgcontainer").draggable();
+                                dataIndex++;
+                                setScore();
+                                GetData(dataIndex);
+                            } else {
+                                $('#score').html("your score is " + score);
+                                $("#imgcontainer").fadeOut();
+                                $("#dataContainer").fadeOut();
+                                $('#refreshButton').fadeIn();
+                            }
+                        }, 3000);
+
+                    },
+                    error: function () {
+                        alert("There was a problem. Please reload the page.");
+                    }
+                });
+
+        }
+        function setScore() {
+            setTimeout(function () {
+                var imgPosition = $('#imgcontainer').position();
+                var imgWidth = $('#natImage').width();
+                var imgHeight = $('#natImage').height();
+                var imgVerticalCenter = imgPosition.left + imgWidth / 2;
+                var imgHorizentalCenter = imgPosition.top + imgHeight / 2;
+                var nationality = $('#natImage').attr("alt");
+                if (imgVerticalCenter > pageVerticalCenter) {
+                    if (imgHorizentalCenter > pageHorizentalCenter) {
+                        if (nationality == "4") {
+                            score += 20;
+                            showScore();
+                        } else {
+                            score -= 5;
+                            showScore();
+                        }
+                    } else {
+                        if (nationality == "2") {
+                            score += 20;
+                            showScore();
+                        } else {
+                            score -= 5;
+                            showScore();
+                        }
+                    }
+                } else {
+                    if (imgHorizentalCenter < pageHorizentalCenter) {
+                        if (nationality == "1") {
+                            score += 20;
+                            showScore();
+                        } else {
+                            score -= 5;
+                            showScore();
+                        }
+                    }
+                    else {
+                        if (nationality == "3") {
+                            score += 20;
+                            showScore();
+                        } else {
+                            score -= 5;
+                            showScore();
+                        }
+                    }
+                }
+                $("#natImage").fadeOut(400);
+            }, 3000);
+
+
+        }
+
+        $('#refreshButton').click(function () {
+            location.reload();
+        });
+        function showScore() {
+            $('#score').html("your score is " + score);
+        }
+    </script>
+}
